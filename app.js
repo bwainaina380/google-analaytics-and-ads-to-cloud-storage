@@ -5,30 +5,53 @@ const googleAnalytics = require("./lib/googleAnalytics");
 const googleAds = require("./lib/googleAds");
 const dotenv = require("dotenv");
 const uploadFile = require("./lib/cloudStorage");
+const fs = require("fs");
 
 dotenv.config();
 app.set("port", process.env.PORT || 3000);
 
-views.forEach(view => {
-  googleAnalytics(view.name, view.id);
-});
+try {
+  views.forEach((view) => {
+    googleAnalytics(view.name, view.id);
+  });
+} catch (error) {
+  console.error(error);
+}
 
 setTimeout(() => {
-  views.forEach(view => {
-    googleAds(view.name, view.id);
-  });
+  try {
+    views.forEach((view) => {
+      googleAds(view.name, view.id);
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }, 30000);
 
 const files = [
   __dirname + "/lib/results/analytics.json",
-  __dirname + "/lib/results/ads.json"
+  __dirname + "/lib/results/ads.json",
 ];
 
 setTimeout(() => {
-  files.forEach(file => {
-    uploadFile(file);
-  });
+  try {
+    files.forEach((file) => {
+      uploadFile(file);
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }, 60000);
+
+setTimeout(() => {
+  try {
+    files.forEach((file) => {
+      fs.unlinkSync(file);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}, 120000);
 
 app.listen(app.get("port"), () => {
   console.log(
