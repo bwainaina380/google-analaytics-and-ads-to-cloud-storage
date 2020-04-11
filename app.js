@@ -10,6 +10,8 @@ const cron = require("node-cron");
 
 dotenv.config();
 app.set("port", process.env.PORT || 3000);
+process.env.GOOGLE_APPLICATION_CREDENTIALS =
+  __dirname + "/credentials/credentials.json";
 
 cron.schedule("0 4 * * *", () => {
   try {
