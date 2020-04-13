@@ -52,18 +52,6 @@ cron.schedule("0 4 * * *", () => {
   }, 60000);
 });
 
-cron.schedule("0 4 * * *", () => {
-  setTimeout(() => {
-    try {
-      files.forEach((file) => {
-        fs.unlinkSync(file);
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }, 120000);
-});
-
 app.listen(app.get("port"), () => {
   console.log(
     `Listening on port ${app.get("port")}; Press Ctrl + C to terminate`
